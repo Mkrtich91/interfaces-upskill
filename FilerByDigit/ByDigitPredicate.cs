@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using FilterByPredicate;
 
 namespace FilterByDigit
@@ -12,16 +13,15 @@ namespace FilterByDigit
         /// Gets or sets a digit.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when Digit more than 9 or less than 0.</exception>
-        public int Digit
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
+        public int Digit { get; set; }
 
         /// <inheritdoc/>
         public bool IsMatch(int number)
         {
-            throw new NotImplementedException();
+            string stringValue = number.ToString(CultureInfo.InvariantCulture);
+#pragma warning disable CA1307
+            return stringValue.Contains(this.Digit.ToString(CultureInfo.InvariantCulture));
+#pragma warning restore CA1307
         }
     }
 }

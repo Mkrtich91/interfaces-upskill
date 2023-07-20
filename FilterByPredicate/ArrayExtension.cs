@@ -19,7 +19,32 @@ namespace FilterByPredicate
         /// <exception cref="ArgumentNullException">Thrown when predicate is null.</exception>
         public static int[] Select(this int[]? source, IPredicate? predicate)
         {
-            throw new NotImplementedException();
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source), "Array cannot be null.");
+            }
+
+            if (source.Length == 0)
+            {
+                throw new ArgumentException("Array cannot be empty.", nameof(source));
+            }
+
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate), "Predicate cannot be null.");
+            }
+
+            List<int> filteredArray = new List<int>();
+#pragma warning disable S3267
+            foreach (int num in source)
+            {
+                if (predicate.IsMatch(num))
+                {
+                    filteredArray.Add(num);
+                }
+            }
+#pragma warning restore S3267
+            return filteredArray.ToArray();
         }
     }
 }

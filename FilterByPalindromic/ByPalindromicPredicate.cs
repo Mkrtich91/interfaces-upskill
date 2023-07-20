@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Globalization;
 using FilterByPredicate;
 
 namespace FilterByPalindromic
@@ -11,7 +12,23 @@ namespace FilterByPalindromic
         /// <inheritdoc/>
         public bool IsMatch(int number)
         {
-            throw new NotImplementedException();
+            string numberStr = number.ToString(CultureInfo.InvariantCulture);
+
+            int left = 0;
+            int right = numberStr.Length - 1;
+
+            while (left < right)
+            {
+                if (numberStr[left] != numberStr[right])
+                {
+                    return false;
+                }
+
+                left++;
+                right--;
+            }
+
+            return true;
         }
     }
 }

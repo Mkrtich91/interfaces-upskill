@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ArrayExtensions
 {
@@ -21,21 +22,54 @@ namespace ArrayExtensions
         /// </example>
         public static int[] FilterByDigit(this int[]? source, int digit)
         {
-            // Add necessary code here, than remove comment.
-            foreach (var item in source)
+            if (source == null)
             {
-                if (IsMatch(item))
+                throw new ArgumentNullException(nameof(source), "Array cannot be null.");
+            }
+
+            if (source.Length == 0)
+            {
+                throw new ArgumentException("Array cannot be empty.", nameof(source));
+            }
+
+            if (digit < 0 || digit > 9)
+            {
+                throw new ArgumentOutOfRangeException(nameof(digit), "Digit must be between 0 and 9.");
+            }
+
+            List<int> filteredElements = new List<int>();
+
+            foreach (int number in source)
+            {
+                if (ContainsDigit(number, digit))
                 {
-                    // Add necessary code here, than remove comment.
+                    filteredElements.Add(number);
                 }
             }
 
-            throw new NotImplementedException();
+            return filteredElements.ToArray();
+        }
 
-            static bool IsMatch(int value)
+        private static bool ContainsDigit(int number, int digit)
+        {
+            number = Math.Abs(number);
+            if (number == 0 && digit == 0)
             {
-                throw new NotImplementedException();
+                return true;
             }
+
+            while (number != 0)
+            {
+                int currentDigit = number % 10;
+                if (currentDigit == digit)
+                {
+                    return true;
+                }
+
+                number /= 10;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -49,22 +83,48 @@ namespace ArrayExtensions
         /// {12345, 1111111112, 987654, 56, 1111111, -1111, 1, 1233321, 70, 15, 123454321}  => { 1111111, 123321, 123454321 }
         /// {56, -1111111112, 987654, 56, 890, -1111, 543, 1233}  => {  }.
         /// </example>
+#pragma warning disable SA1202
         public static int[] FilterByPalindromic(this int[]? source)
+#pragma warning restore SA1202
         {
-            // Add necessary code here, than remove comment.
-            foreach (var item in source)
+            if (source == null)
             {
-                if (IsMatch(item))
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (source.Length == 0)
+            {
+                throw new ArgumentException("Array is empty.", nameof(source));
+            }
+
+            List<int> filteredArray = new List<int>();
+            foreach (int num in source)
+            {
+                if (IsMatch(num))
                 {
-                    // Add necessary code here, than remove comment.
+                    filteredArray.Add(num);
                 }
             }
 
-            throw new NotImplementedException();
+            return filteredArray.ToArray();
 
             static bool IsMatch(int value)
             {
-                throw new NotImplementedException();
+                string strNum = value.ToString(CultureInfo.InvariantCulture);
+                int left = 0;
+                int right = strNum.Length - 1;
+                while (left < right)
+                {
+                    if (strNum[left] != strNum[right])
+                    {
+                        return false;
+                    }
+
+                    left++;
+                    right--;
+                }
+
+                return true;
             }
         }
     }
